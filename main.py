@@ -5,9 +5,6 @@ import datetime
 
 
 def search(num):
-    host = 'http://api.finance.naver.com'
-    path = '/service/itemSummary.nhn'
-
     if num == 1:
         itemcode = "005930"
     elif num == 2:
@@ -16,18 +13,18 @@ def search(num):
         itemcode = "000660"
     elif num == 4:
         itemcode = "035420"
-    param = {'itemcode': itemcode}
 
+    host = 'http://api.finance.naver.com'
+    path = '/service/itemSummary.nhn'
+    param = {'itemcode': itemcode}
     url = host + path
 
     res = requests.get(url, params=param)
-
     if res.status_code != 200:
         print("API Get Failed")
         quit()
 
     data = res.json()
-
     save(data, num)
 
 
@@ -48,6 +45,7 @@ def save(data, itemcode):
 
     wb = openpyxl.load_workbook(
         '/home/kmkim/Projects/git/kmkim036/Stock-Manage/data.xlsx')
+
     if itemcode == 1:
         ws = wb['samsung']
     elif itemcode == 2:
