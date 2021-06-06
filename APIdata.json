@@ -1,0 +1,14 @@
+{
+	"marketSum": "시가총액 (x 1 million)",
+	"per": "PER",
+	"eps": "EPS",
+	"pbr": "PBR",
+	"now": "현재 시가",
+	"diff": "전일 대비",
+	"rate": "등락률",
+	"quant": "거래량",
+	"amount": "거래 대금 (x 1 million)",
+	"high": "고가",
+	"low": "저가",
+	"risefall": "1: 상한, 2: 상승, 3: 보합, 4: 하한, 5: 하락"
+}
