@@ -81,10 +81,8 @@ def sendKakaotalk(ent_name):
         "object_type": "text",
         "text": ent_name + " 돔황챠~~",
         "link": {
-            "web_url": "https://developers.kakao.com",
-            "mobile_web_url": "https://developers.kakao.com"
-        },
-        "button_title": "바로 확인"
+            "web_url": "https://developers.kakao.com"
+        }
     }
     body_json = {"template_object": json.dumps(body)}
 
