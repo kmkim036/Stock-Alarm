@@ -14,15 +14,28 @@ class enterprise:
         path = '/service/itemSummary.nhn'
         param = {'itemcode': self.itemcode}
         url = host + path
+
         res = requests.get(url, params=param)
         if res.status_code != 200:
             print("ERROR:" + "API Get Failed in " + self.name)
             return
+
         data = res.json()
         self.save(data)
 
     def save(self, data):
+        wb = openpyxl.load_workbook(
+            '/home/kmkim/Projects/git/kmkim036/Stock-Manage/data.xlsx')
+        ws = wb[self.name]
+
+        A_lastrow = 'A' + str(ws.max_row)
         dt_now = datetime.datetime.now()
+        if dt_now.date() < ws[A_lastrow].value.date():
+            print("ERROR: " + "Date overflow in " + self.name)
+            return
+
+        if dt_now.date() == ws[A_lastrow].value.date():
+            ws.delete_rows(ws.max_row)
 
         risefall = data["risefall"]
         if risefall == 1:
@@ -35,20 +48,6 @@ class enterprise:
             rf = "하한"
         else:
             rf = "하락"
-
-        wb = openpyxl.load_workbook(
-            '/home/kmkim/Projects/git/kmkim036/Stock-Manage/data.xlsx')
-
-        ws = wb[self.name]
-
-        A_lastrow = 'A' + str(ws.max_row)
-
-        if dt_now.date() < ws[A_lastrow].value.date():
-            print("ERROR: " + "Date overflow in " + self.name)
-            return
-
-        if dt_now.date() == ws[A_lastrow].value.date():
-            ws.delete_rows(ws.max_row)
 
         ws.append([dt_now.date(), data["marketSum"], data["per"], data["eps"], data["pbr"], data["now"],
                    data["diff"], data["rate"], data["quant"], data["amount"], data["high"], data["low"], rf])
