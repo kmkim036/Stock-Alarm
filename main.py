@@ -4,7 +4,7 @@ import openpyxl
 import datetime
 
 
-class enterprise:
+class Enterprise:
     def __init__(self, name, itemcode):
         self.name = name
         self.itemcode = itemcode
@@ -32,6 +32,7 @@ class enterprise:
         dt_now = datetime.datetime.now()
         if dt_now.date() < ws[A_lastrow].value.date():
             print("ERROR: " + "Date overflow in " + self.name)
+            wb.close()
             return
 
         if dt_now.date() == ws[A_lastrow].value.date():
@@ -55,14 +56,14 @@ class enterprise:
         wb.close()
 
 
-e1 = enterprise("samsung", "005930")
+e1 = Enterprise("samsung", "005930")
 e1.referAPI()
 
-e2 = enterprise("kakao", "035720")
+e2 = Enterprise("kakao", "035720")
 e2.referAPI()
 
-e3 = enterprise("SKhynix", "000660")
+e3 = Enterprise("SKhynix", "000660")
 e3.referAPI()
 
-e4 = enterprise("naver", "035420")
+e4 = Enterprise("naver", "035420")
 e4.referAPI()
