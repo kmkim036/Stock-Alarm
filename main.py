@@ -9,7 +9,7 @@ class enterprise:
         self.name = name
         self.itemcode = itemcode
 
-    def search(self):
+    def referAPI(self):
         host = 'http://api.finance.naver.com'
         path = '/service/itemSummary.nhn'
         param = {'itemcode': self.itemcode}
@@ -44,7 +44,7 @@ class enterprise:
         A_lastrow = 'A' + str(ws.max_row)
 
         if dt_now.date() < ws[A_lastrow].value.date():
-            print("ERROR: "+ "Date overflow in " + self.name)
+            print("ERROR: " + "Date overflow in " + self.name)
             return
 
         if dt_now.date() == ws[A_lastrow].value.date():
@@ -57,13 +57,13 @@ class enterprise:
 
 
 e1 = enterprise("samsung", "005930")
-e1.search()
+e1.referAPI()
 
 e2 = enterprise("kakao", "035720")
-e2.search()
+e2.referAPI()
 
 e3 = enterprise("SKhynix", "000660")
-e3.search()
+e3.referAPI()
 
 e4 = enterprise("naver", "035420")
-e4.search()
+e4.referAPI()
