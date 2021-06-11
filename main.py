@@ -20,7 +20,8 @@ class Enterprise:
 
         res = requests.get(url, params=param)
         if res.status_code != 200:
-            print("ERROR:" + "Get API Failed in " + sys._getframe().f_code.co_name)
+            print("ERROR:" + "Get API Failed in " +
+                  sys._getframe().f_code.co_name)
             return
 
         data = res.json()
@@ -37,13 +38,15 @@ class Enterprise:
                 '/home/kmkim/Projects/git/kmkim036/Stock-Manage/data.xlsx')
             ws = wb[self.name]
         except FileNotFoundError:
-            print("ERROR: " + "File open error in " + sys._getframe().f_code.co_name)
+            print("ERROR: " + "File open error in " +
+                  sys._getframe().f_code.co_name)
             return
 
         A_lastrow = 'A' + str(ws.max_row)
         dt_now = datetime.datetime.now()
         if dt_now.date() < ws[A_lastrow].value.date():
-            print("ERROR: " + "Date overflow in " + sys._getframe().f_code.co_name)
+            print("ERROR: " + "Date overflow in " +
+                  sys._getframe().f_code.co_name)
             wb.close()
             return
 
