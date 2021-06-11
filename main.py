@@ -2,6 +2,9 @@ import requests
 import json
 import openpyxl
 import datetime
+import sys
+
+import kakao_api
 
 
 class Enterprise:
@@ -17,14 +20,14 @@ class Enterprise:
 
         res = requests.get(url, params=param)
         if res.status_code != 200:
-            print("ERROR:" + "Get stock-info API Failed in " + self.name)
+            print("ERROR:" + "Get API Failed in " + sys._getframe().f_code.co_name)
             return
 
         data = res.json()
 
         # revise condition for alarm after
         if data["risefall"] > 3:
-            sendKakaotalk(self.name)
+            kakao_api.send_to_me(self.name)
 
         self.save(data)
 
@@ -34,13 +37,13 @@ class Enterprise:
                 '/home/kmkim/Projects/git/kmkim036/Stock-Manage/data.xlsx')
             ws = wb[self.name]
         except FileNotFoundError:
-            print("ERROR: " + "File 'data.xlsx' open error in " + self.name)
+            print("ERROR: " + "File open error in " + sys._getframe().f_code.co_name)
             return
 
         A_lastrow = 'A' + str(ws.max_row)
         dt_now = datetime.datetime.now()
         if dt_now.date() < ws[A_lastrow].value.date():
-            print("ERROR: " + "Date overflow in " + self.name)
+            print("ERROR: " + "Date overflow in " + sys._getframe().f_code.co_name)
             wb.close()
             return
 
@@ -63,34 +66,6 @@ class Enterprise:
                    data["diff"], data["rate"], data["quant"], data["amount"], data["high"], data["low"], rf])
         wb.save('/home/kmkim/Projects/git/kmkim036/Stock-Manage/data.xlsx')
         wb.close()
-
-
-def sendKakaotalk(ent_name):
-    try:
-        with open('/home/kmkim/Projects/security.json') as json_file:
-            json_data = json.load(json_file)
-            KAKAO_TOKEN = json_data["kakao"]["self-send-token"]
-    except FileNotFoundError:
-        print("ERROR: " + "File 'security.json' open error in " + ent_name)
-        return
-
-    header = {"Authorization": 'Bearer ' + KAKAO_TOKEN}
-    url = "https://kapi.kakao.com/v2/api/talk/memo/default/send"
-
-    body = {
-        "object_type": "text",
-        "text": ent_name + " 돔황챠~~",
-        "link": {
-            "web_url": "https://developers.kakao.com"
-        }
-    }
-    body_json = {"template_object": json.dumps(body)}
-
-    res = requests.post(url, headers=header, data=body_json)
-    if res.status_code != 200:
-        print("ERROR: " + "post kakao-self-send API in " + ent_name)
-
-    return
 
 
 e1 = Enterprise("samsung", "005930")
