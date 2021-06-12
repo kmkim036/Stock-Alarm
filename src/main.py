@@ -4,7 +4,8 @@ import openpyxl
 import datetime
 import sys
 
-import kakao_api
+import naver_api
+import log
 
 
 class Enterprise:
@@ -12,41 +13,26 @@ class Enterprise:
         self.name = name
         self.itemcode = itemcode
 
-    def referAPI(self):
-        host = 'http://api.finance.naver.com'
-        path = '/service/itemSummary.nhn'
-        param = {'itemcode': self.itemcode}
-        url = host + path
-
-        res = requests.get(url, params=param)
-        if res.status_code != 200:
-            print("ERROR:" + "Get API Failed in " +
-                  sys._getframe().f_code.co_name)
+    def get_data(self):
+        ret = naver_api.get_stock_data(self.name, self.itemcode)
+        if ret == -1:
             return
-
-        data = res.json()
-
-        # revise condition for alarm after
-        if data["risefall"] > 3:
-            kakao_api.send_to_me(self.name)
-
-        self.save(data)
+        else:
+            self.save(ret)
 
     def save(self, data):
         try:
             wb = openpyxl.load_workbook(
-                '/home/kmkim/Projects/git/kmkim036/Stock-Manage/data.xlsx')
+                '/home/kmkim/Projects/git/kmkim036/Stock-Manage/data/data.xlsx')
             ws = wb[self.name]
         except FileNotFoundError:
-            print("ERROR: " + "File open error in " +
-                  sys._getframe().f_code.co_name)
+            log.record_error(2, 0, sys._getframe().f_code.co_name)
             return
 
         A_lastrow = 'A' + str(ws.max_row)
         dt_now = datetime.datetime.now()
         if dt_now.date() < ws[A_lastrow].value.date():
-            print("ERROR: " + "Date overflow in " +
-                  sys._getframe().f_code.co_name)
+            log.record_error(1, 0, sys._getframe().f_code.co_name)
             wb.close()
             return
 
@@ -67,18 +53,18 @@ class Enterprise:
 
         ws.append([dt_now.date(), data["marketSum"], data["per"], data["eps"], data["pbr"], data["now"],
                    data["diff"], data["rate"], data["quant"], data["amount"], data["high"], data["low"], rf])
-        wb.save('/home/kmkim/Projects/git/kmkim036/Stock-Manage/data.xlsx')
+        wb.save('/home/kmkim/Projects/git/kmkim036/Stock-Manage/data/data.xlsx')
         wb.close()
 
 
 e1 = Enterprise("samsung", "005930")
-e1.referAPI()
+e1.get_data()
 
 e2 = Enterprise("kakao", "035720")
-e2.referAPI()
+e2.get_data()
 
 e3 = Enterprise("SKhynix", "000660")
-e3.referAPI()
+e3.get_data()
 
 e4 = Enterprise("naver", "035420")
-e4.referAPI()
+e4.get_data()
