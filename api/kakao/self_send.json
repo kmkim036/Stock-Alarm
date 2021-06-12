@@ -1,0 +1,24 @@
+{
+    "request": {
+        "method": "POST",
+        "host": "kapi.kakao.com",
+        "path": "/v2/api/talk/memo/default/send",
+        "header": {
+            "Authorization": "Bearer {ACCESS_TOKEN}"
+        },
+        "data": {
+            "object_type": "text",
+            "text": "message",
+            "link": {
+                "web_url": "https://developers.kakao.com"
+            }
+        }
+    },
+    "response": {
+        "status": {
+            "200": "success",
+            "400": "Not Exist Talk User",
+            "404": "wrong path"
+        }
+    }
+}

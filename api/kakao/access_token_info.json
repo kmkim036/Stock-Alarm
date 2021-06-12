@@ -1,0 +1,22 @@
+{
+	"request": {
+		"method": "GET",
+		"host": "kapi.kakao.com",
+		"path": "/v1/user/access_token_info",
+		"header": {
+			"Authorization": "Bearer {ACCESS_TOKEN}"
+		}
+	},
+	"response": {
+		"status": {
+			"200": "success",
+			"400": "서비스 일시 장애, 필수 인자 또는 호출 인자 부적절",
+			"401": "유효하지 않은 앱키나 액세스 토큰으로 요청"
+		},
+		"data": {
+			"id": "회원번호",
+			"expires_in": "액세스 토큰 만료 시간(초)",
+			"app_id": "토큰이 발급된 앱 ID"
+		}
+	}
+}
