@@ -8,6 +8,9 @@ import naver_api
 import log
 
 
+data_FILE_PATH = '/home/kmkim/Projects/git/kmkim036/Stock-Manage/data/data.xlsx'
+
+
 class Enterprise:
     def __init__(self, name, itemcode):
         self.name = name
@@ -22,8 +25,7 @@ class Enterprise:
 
     def save(self, data):
         try:
-            wb = openpyxl.load_workbook(
-                '/home/kmkim/Projects/git/kmkim036/Stock-Manage/data/data.xlsx')
+            wb = openpyxl.load_workbook(data_FILE_PATH)
             ws = wb[self.name]
         except FileNotFoundError:
             log.record_error(2, 0, sys._getframe().f_code.co_name)
@@ -53,7 +55,7 @@ class Enterprise:
 
         ws.append([dt_now.date(), data["marketSum"], data["per"], data["eps"], data["pbr"], data["now"],
                    data["diff"], data["rate"], data["quant"], data["amount"], data["high"], data["low"], rf])
-        wb.save('/home/kmkim/Projects/git/kmkim036/Stock-Manage/data/data.xlsx')
+        wb.save(data_FILE_PATH)
         wb.close()
 
 

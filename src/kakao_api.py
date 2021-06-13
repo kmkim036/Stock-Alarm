@@ -5,6 +5,8 @@ import sys
 import log
 
 
+security_FILE_PATH = '/home/kmkim/Projects/security.json'
+
 def check_access_token(access_token):
     host = "https://kapi.kakao.com"
     path = "/v1/user/access_token_info"
@@ -29,7 +31,7 @@ def send_to_me(ent_name):
     log.record_kakao_send(ent_name)
 
     try:
-        with open('/home/kmkim/Projects/security.json') as json_file:
+        with open(security_FILE_PATH) as json_file:
             json_data = json.load(json_file)
     except FileNotFoundError:
         log.record_error(2, 0, sys._getframe().f_code.co_name)
