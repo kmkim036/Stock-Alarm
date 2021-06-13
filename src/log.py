@@ -12,7 +12,7 @@ def record_kakao_send(ent_name):
     f.close()
 
 
-def record_error(code, status_code, func):
+def record_error(code, api_status, func):
     try:
         f = open('/home/kmkim/Projects/git/kmkim036/Stock-Manage/log/error.log', 'a')
     except FileNotFoundError:
@@ -23,9 +23,9 @@ def record_error(code, status_code, func):
     elif code == 2:
         msg = "File open error in "
     elif code == 3:
-        msg = str(status_code) + ": Post API failed in "
+        msg = str(api_status) + ": Post API failed in "
     elif code == 4:
-        msg = str(status_code) + ": Get API failed in "
+        msg = str(api_status) + ": Get API failed in "
     elif code == 5:
         msg = "Access token expired in "
 

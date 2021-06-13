@@ -19,7 +19,7 @@ def check_access_token(access_token):
     data = res.json()
 
     if(data["expires_in"] < 1):
-        log.record_error(5, sys._getframe().f_code.co_name)
+        log.record_error(5, 0, sys._getframe().f_code.co_name)
         return -2
 
     return 0
@@ -32,7 +32,7 @@ def send_to_me(ent_name):
         with open('/home/kmkim/Projects/security.json') as json_file:
             json_data = json.load(json_file)
     except FileNotFoundError:
-        log.record_error(2, sys._getframe().f_code.co_name)
+        log.record_error(2, 0, sys._getframe().f_code.co_name)
         return
 
     ACCESS_TOKEN = json_data["kakao"]["access-token"]
