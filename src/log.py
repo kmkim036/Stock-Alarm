@@ -1,10 +1,13 @@
 import datetime
 
 
+kakao_send_log_FILE_PATH = '/home/kmkim/Projects/git/kmkim036/Stock-Manage/log/kakao_send.log'
+error_log_FILE_PATH = '/home/kmkim/Projects/git/kmkim036/Stock-Manage/log/error.log'
+
+
 def record_kakao_send(ent_name):
     try:
-        f = open(
-            '/home/kmkim/Projects/git/kmkim036/Stock-Manage/log/kakao_send.log', 'a')
+        f = open(kakao_send_log_FILE_PATH, 'a')
     except FileNotFoundError:
         return
 
@@ -14,7 +17,7 @@ def record_kakao_send(ent_name):
 
 def record_error(code, api_status, func):
     try:
-        f = open('/home/kmkim/Projects/git/kmkim036/Stock-Manage/log/error.log', 'a')
+        f = open(error_log_FILE_PATH, 'a')
     except FileNotFoundError:
         return
 
