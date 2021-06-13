@@ -1,11 +1,10 @@
-import requests
+import sys
+import datetime
 import json
 import openpyxl
-import datetime
-import sys
 
-import naver_api
 import log
+import naver_api
 
 
 data_FILE_PATH = '/home/kmkim/Projects/git/kmkim036/Stock-Manage/data/data.xlsx'

@@ -1,9 +1,9 @@
+import sys
 import requests
 import json
-import sys
 
-import kakao_api
 import log
+import kakao_api
 
 
 def get_stock_data(name, itemcode):
