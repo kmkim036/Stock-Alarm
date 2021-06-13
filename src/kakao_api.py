@@ -7,6 +7,7 @@ import log
 
 security_FILE_PATH = '/home/kmkim/Projects/security.json'
 
+
 def check_access_token(access_token):
     host = "https://kapi.kakao.com"
     path = "/v1/user/access_token_info"
