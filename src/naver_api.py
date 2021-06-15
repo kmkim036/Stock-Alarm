@@ -4,7 +4,7 @@ import json
 
 import log
 import kakao_api
-
+import mail
 
 def get_stock_data(name, itemcode):
     host = "https://api.finance.naver.com"
@@ -20,7 +20,9 @@ def get_stock_data(name, itemcode):
     data = res.json()
 
     # revise condition for alarm after
+    # if data["risefall"] > 3:
+    #     kakao_api.send_to_me(name)
     if data["risefall"] > 3:
-        kakao_api.send_to_me(name)
-
+        mail.send_mail(name)
+    
     return data
