@@ -1,4 +1,5 @@
 import sys
+import datetime
 import json
 import smtplib
 from email.mime.text import MIMEText
@@ -22,13 +23,15 @@ def send_mail(ent_name):
     password = json_data["naver"]["pw"]
     recvEmail = json_data["google"]["id"]
 
+    dt_now = datetime.datetime.now()
+
     smtpName = "smtp.naver.com"
     smtpPort = 587
 
     text = ent_name + " 돔황챠~~"
     msg = MIMEText(text)
 
-    msg['Subject'] = "[주식 알림]"
+    msg['Subject'] = "[주식 알림] at " + str(dt_now.date())
     msg['From'] = sendEmail
     msg['To'] = recvEmail
 
