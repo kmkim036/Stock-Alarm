@@ -5,6 +5,7 @@ import openpyxl
 
 import log
 import naver_api
+import kakao_api
 
 
 data_FILE_PATH = '/home/kmkim/Projects/git/kmkim036/Stock-Manage/data/data.xlsx'
@@ -56,6 +57,9 @@ class Enterprise:
                    data["diff"], data["rate"], data["quant"], data["amount"], data["high"], data["low"], rf])
         wb.save(data_FILE_PATH)
         wb.close()
+
+
+kakao_api.refresh_token()
 
 
 e1 = Enterprise("samsung", "005930")
