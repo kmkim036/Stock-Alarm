@@ -38,5 +38,5 @@ def send_mail(ent_name):
     s = smtplib.SMTP(smtpName, smtpPort)
     s.starttls()
     s.login(sendEmail, password)
-    s.sendmail(sendEmail, recvEmail, msg.as_string())  
-    s.close()  
+    s.sendmail(sendEmail, recvEmail, msg.as_string())
+    s.close()
