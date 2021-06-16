@@ -6,6 +6,7 @@ import log
 import kakao_api
 import mail
 
+
 def get_stock_data(name, itemcode):
     host = "https://api.finance.naver.com"
     path = "/service/itemSummary.nhn"
@@ -23,5 +24,5 @@ def get_stock_data(name, itemcode):
     if data["risefall"] > 3:
         kakao_api.send_to_me(name)
         mail.send_mail(name)
-    
+
     return data
