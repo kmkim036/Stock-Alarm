@@ -8,6 +8,95 @@ import log
 security_FILE_PATH = '/home/kmkim/Projects/security.json'
 
 
+def check_refresk_token(json):
+    try:
+        buf = json['refresh_token']
+    except KeyError:
+        return False
+    return True
+
+
+def get_token():
+    try:
+        with open(security_FILE_PATH) as json_file:
+            json_data = json.load(json_file)
+    except FileNotFoundError:
+        log.record_error(2, 0, sys._getframe().f_code.co_name)
+        return
+
+    host = "https://kauth.kakao.com"
+    path = "/oauth/token"
+    url = host + path
+
+    restapi_key = json_data['kakao']['restapi-key']
+    redirect_uri = json_data['kakao']['redirect-uri']
+    code = json_data['kakao']['code']
+
+    parameter = {
+        'grant_type': 'authorization_code',
+        'client_id': restapi_key,
+        'redirect_uri': redirect_uri,
+        'code': code
+    }
+
+    res = requests.post(url, params=parameter)
+    if res.status_code != 200:
+        log.record_error(3, res.status_code, sys._getframe().f_code.co_name)
+        return -1
+
+    data = res.json()
+
+    json_data['kakao']['access-token'] = data['access_token']
+    json_data['kakao']['refresh-token'] = data['refresh_token']
+
+    try:
+        with open(security_FILE_PATH, 'w', encoding='utf-8') as make_file:
+            json.dump(json_data, make_file, indent="\t")
+    except FileNotFoundError:
+        log.record_error(2, 0, sys._getframe().f_code.co_name)
+        return
+
+
+def refresh_token():
+    try:
+        with open(security_FILE_PATH) as json_file:
+            json_data = json.load(json_file)
+    except FileNotFoundError:
+        log.record_error(2, 0, sys._getframe().f_code.co_name)
+        return
+
+    host = "https://kauth.kakao.com"
+    path = "/oauth/token"
+    url = host + path
+
+    restapi_key = json_data['kakao']['restapi-key']
+    refresh_token = json_data['kakao']['refresh-token']
+
+    parameter = {
+        'grant_type': 'refresh_token',
+        'client_id': restapi_key,
+        'refresh_token': refresh_token
+    }
+
+    res = requests.post(url, params=parameter)
+    if res.status_code != 200:
+        log.record_error(3, res.status_code, sys._getframe().f_code.co_name)
+        return -1
+
+    data = res.json()
+
+    json_data['kakao']['access-token'] = data['access_token']
+    if check_refresk_token == True:
+        json_data['kakao']['refresh-token'] = data['refresh_token']
+
+    try:
+        with open(security_FILE_PATH, 'w', encoding='utf-8') as make_file:
+            json.dump(json_data, make_file, indent="\t")
+    except FileNotFoundError:
+        log.record_error(2, 0, sys._getframe().f_code.co_name)
+        return
+
+
 def check_access_token(access_token):
     host = "https://kapi.kakao.com"
     path = "/v1/user/access_token_info"
