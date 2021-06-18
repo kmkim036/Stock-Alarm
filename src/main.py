@@ -6,35 +6,42 @@ import openpyxl
 import log
 import naver_api
 import kakao_api
+import mail
 
 
 data_FILE_PATH = '/home/kmkim/Projects/git/kmkim036/Stock-Alarm/data/data.xlsx'
 
 
 class Enterprise:
-    def __init__(self, name, itemcode):
+    def __init__(self, name, itemcode, purchase_price):
         self.name = name
         self.itemcode = itemcode
+        self.purchase_price = purchase_price
 
     def get_data(self):
         ret = naver_api.get_stock_data(self.name, self.itemcode)
-        if ret == -1:
+        if ret == -1 or ret == -2:
             return
         else:
-            self.save(ret)
+            if (ret['now'] < self.purchase_price * 0.95):
+                kakao_api.send_to_me(self.name)
+                mail.send_mail(self.name)
+            self.save_data(ret)
 
-    def save(self, data):
+    def save_data(self, data):
         try:
             wb = openpyxl.load_workbook(data_FILE_PATH)
             ws = wb[self.name]
         except FileNotFoundError:
-            log.record_error(2, 0, sys._getframe().f_code.co_name)
+            msg = "File open error"
+            log.record_error(msg, sys._getframe().f_code.co_name)
             return
 
         A_lastrow = 'A' + str(ws.max_row)
         dt_now = datetime.datetime.now()
         if dt_now.date() < ws[A_lastrow].value.date():
-            log.record_error(1, 0, sys._getframe().f_code.co_name)
+            msg = "Date overflow"
+            log.record_error(msg, sys._getframe().f_code.co_name)
             wb.close()
             return
 
@@ -59,17 +66,18 @@ class Enterprise:
         wb.close()
 
 
-kakao_api.refresh_token()
+if __name__ == "__main__":
+    if kakao_api.refresh_token() < 0:
+        sys.exit(1)
 
+    e1 = Enterprise("samsung", "005930", 80600)
+    e1.get_data()
 
-e1 = Enterprise("samsung", "005930")
-e1.get_data()
+    e2 = Enterprise("kakao", "035720", 127000)
+    e2.get_data()
 
-e2 = Enterprise("kakao", "035720")
-e2.get_data()
+    e3 = Enterprise("SKhynix", "000660", 128500)
+    e3.get_data()
 
-e3 = Enterprise("SKhynix", "000660")
-e3.get_data()
-
-e4 = Enterprise("naver", "035420")
-e4.get_data()
+    e4 = Enterprise("naver", "035420", 367000)
+    e4.get_data()
