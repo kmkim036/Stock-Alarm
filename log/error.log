@@ -8,6 +8,3 @@
 2021-06-18 21:39:47.605574: 400: Post API failed in refresh_token
 2021-06-18 21:39:47.810959: 401: Get API failed in check_access_token
 2021-06-18 21:39:48.671036: 401: Get API failed in check_access_token
-2021-06-18 21:40:21.674986: 400: Post API failed in refresh_token
-2021-06-18 21:40:21.774534: 401: Get API failed in check_access_token
-2021-06-18 21:40:23.005932: 401: Get API failed in check_access_token
