@@ -3,8 +3,6 @@ import requests
 import json
 
 import log
-import kakao_api
-import mail
 
 
 def get_stock_data(name, itemcode):
@@ -14,15 +12,16 @@ def get_stock_data(name, itemcode):
     parameter = {'itemcode': itemcode}
 
     res = requests.get(url, params=parameter)
+
     if res.status_code != 200:
-        log.record_error(4, res.status_code, sys._getframe().f_code.co_name)
+        msg = "API GET failed, status code: " + \
+            str(res.status_code) + "description: wrong url"
+        log.record_error(msg, sys._getframe().f_code.co_name)
         return -1
 
-    data = res.json()
+    if res.text == '':
+        msg = "API GET failed, description: wrong itemcode"
+        log.record_error(msg, sys._getframe().f_code.co_name)
+        return -2
 
-    # revise condition for alarm after
-    if data["risefall"] > 3:
-        kakao_api.send_to_me(name)
-        mail.send_mail(name)
-
-    return data
+    return res.json()
