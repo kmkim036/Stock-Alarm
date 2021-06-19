@@ -15,12 +15,12 @@ def get_stock_data(name, itemcode):
 
     if res.status_code != 200:
         msg = "API GET failed, status code: " + \
-            str(res.status_code) + "description: wrong url"
+            str(res.status_code) + ", error desc: wrong url"
         log.record_error(msg, sys._getframe().f_code.co_name)
         return -1
 
     if res.text == '':
-        msg = "API GET failed, description: wrong itemcode"
+        msg = "API GET failed, error desc: wrong itemcode"
         log.record_error(msg, sys._getframe().f_code.co_name)
         return -2
 
