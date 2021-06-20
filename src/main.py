@@ -23,9 +23,6 @@ class Enterprise:
         if ret == -1 or ret == -2:
             return
         else:
-            if (ret['now'] < self.purchase_price * 0.95):
-                kakao_api.send_to_me(self.name)
-                mail.send_mail(self.name)
             self.save_data(ret)
 
     def save_data(self, data):
@@ -37,15 +34,16 @@ class Enterprise:
             log.record_error(msg, sys._getframe().f_code.co_name)
             return
 
-        A_lastrow = 'A' + str(ws.max_row)
+        lastrow = ws.max_row
         dt_now = datetime.datetime.now()
-        if dt_now.date() < ws[A_lastrow].value.date():
+
+        if dt_now.date() < ws['A' + str(lastrow)].value.date():
             msg = "Date overflow"
             log.record_error(msg, sys._getframe().f_code.co_name)
             wb.close()
             return
 
-        if dt_now.date() == ws[A_lastrow].value.date():
+        if dt_now.date() == ws['A' + str(lastrow)].value.date():
             ws.delete_rows(ws.max_row)
 
         risefall = data["risefall"]
@@ -59,6 +57,30 @@ class Enterprise:
             rf = "하한"
         else:
             rf = "하락"
+
+        lower_threshold = self.purchase_price * 0.95
+        upper_threshold = self.purchase_price * 1.05
+
+        if lastrow < 6:
+            check_range = range(2, lastrow + 1)
+        else:
+            check_range = range(lastrow - 3, lastrow + 1)
+
+        check = 'n'
+        for i in check_range:
+            value = ws['F' + str(i)].value
+            if value < lower_threshold:
+                check = 'y_l'
+            elif value > upper_threshold:
+                check = 'y_u'
+
+        if check != 'y_l' and data['now'] < lower_threshold:
+            kakao_api.send_to_me(self.name, 1)
+            mail.send_mail(self.name, 1)
+            
+        if check != 'y_u' and data['now'] > upper_threshold:
+            kakao_api.send_to_me(self.name, 2)
+            mail.send_mail(self.name, 2)
 
         ws.append([dt_now.date(), data["marketSum"], data["per"], data["eps"], data["pbr"], data["now"],
                    data["diff"], data["rate"], data["quant"], data["amount"], data["high"], data["low"], rf])

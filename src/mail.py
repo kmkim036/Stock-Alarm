@@ -10,7 +10,7 @@ import log
 security_FILE_PATH = '/home/kmkim/Projects/security.json'
 
 
-def send_mail(ent_name):
+def send_mail(ent_name, state):
     log.record_mail_send(ent_name)
     try:
         with open(security_FILE_PATH) as json_file:
@@ -28,7 +28,10 @@ def send_mail(ent_name):
     smtpName = "smtp.naver.com"
     smtpPort = 587
 
-    text = ent_name + " 돔황챠~~"
+    if state == 1:
+        text = "lower than threshold in " + ent_name
+    elif state == 2:
+        text = "upper than threshold in " + ent_name
     msg = MIMEText(text)
 
     msg['Subject'] = "[주식 알림] at " + str(dt_now.date())

@@ -119,7 +119,7 @@ def refresh_token():
     return 0
 
 
-def send_to_me(ent_name):
+def send_to_me(ent_name, state):
     log.record_kakao_send(ent_name)
 
     try:
@@ -130,6 +130,10 @@ def send_to_me(ent_name):
         return -1
 
     ACCESS_TOKEN = json_data["kakao"]["access-token"]
+    if state == 1:
+        text = "lower than threshold in " + ent_name
+    elif state == 2:
+        text = "upper than threshold in " + ent_name
 
     host = "https://kapi.kakao.com"
     path = "/v2/api/talk/memo/default/send"
@@ -137,7 +141,7 @@ def send_to_me(ent_name):
     header = {"Authorization": 'Bearer ' + ACCESS_TOKEN}
     body = {
         "object_type": "text",
-        "text": ent_name + " 돔황챠~~",
+        "text": text,
         "link": {
             "web_url": "https://developers.kakao.com"
         }
