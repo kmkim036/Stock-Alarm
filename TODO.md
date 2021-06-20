@@ -1,0 +1,11 @@
+# ToDo List for Stock-Alarm
+- [X] Get Stock data by Naver API
+- [X] Push alarm by Kakao API
+- [X] Organize API manual
+- [X] Push alarm by mail
+- [X] Save stock data to excel file
+- [X] Save log message
+- [X] Use script file for executing python and git push
+- [X] Use Crontab for automatical and periodical executing
+- [ ] Subdivide alarm conditions
+- [ ] Fix Kakao refresh token bug
