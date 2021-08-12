@@ -1,18 +1,24 @@
 {
 	"request": {
-		"method": "GET",
-		"host": "api.finance.naver.com",
-		"path": "/service/itemSummary.nhn",
-		"parameter": {
-			"itemcode": "enterprise's code"
+		"header": {
+			"http": "HTTP1.1",
+			"host": "api.finance.naver.com",
+			"path": "/service/itemSummary.nhn",
+			"method": "GET",
+			"parameter": {
+				"itemcode": "enterprise's code"
+			}
 		}
 	},
 	"response": {
-		"status": {
-			"200": "success",
-			"404": "wrong URL"
+		"header": {
+			"statuscode": {
+				"200": "success",
+				"404": "wrong URL"
+			},
+			"Content-Type": "application/json"
 		},
-		"data": {
+		"body": {
 			"marketSum": "시가총액 (x 1 million)",
 			"per": "PER",
 			"eps": "EPS",

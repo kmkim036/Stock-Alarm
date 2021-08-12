@@ -1,12 +1,13 @@
 {
     "request": {
-        "method": "POST",
-        "host": "kapi.kakao.com",
-        "path": "/v2/api/talk/memo/default/send",
         "header": {
+            "http": "HTTP1.1",
+            "host": "kapi.kakao.com",
+            "path": "/v2/api/talk/memo/default/send",
+            "method": "POST",
             "Authorization": "Bearer {ACCESS_TOKEN}"
         },
-        "data": {
+        "body": {
             "object_type": "text",
             "text": "message",
             "link": {
@@ -15,10 +16,12 @@
         }
     },
     "response": {
-        "status": {
-            "200": "success",
-            "400": "Not Exist Talk User",
-            "404": "wrong path"
+        "header": {
+            "statuscode": {
+                "200": "success",
+                "400": "Not Exist Talk User",
+                "404": "wrong path"
+            }
         }
     }
 }

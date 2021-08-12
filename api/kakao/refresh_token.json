@@ -1,21 +1,28 @@
 {
     "request": {
-        "method": "POST",
-        "host": "kauth.kakao.com",
-        "path": "/oauth/token",
-        "parameter": {
+        "header": {
+            "http": "HTTP1.1",
+            "host": "kauth.kakao.com",
+            "path": "/oauth/token",
+            "method": "POST",
+            "Content-type": "application/x-www-form-urlencoded;charset=utf-8"
+        },
+        "body": {
             "grant_type": "refresh_token으로 고정",
             "client_id": "앱 생성 시 발급받은 REST API",
             "refresh_token": "토큰 발급 시 응답으로 받은 refresh_token"
         }
     },
     "response": {
-        "status": {
-            "200": "success",
-            "400": "서비스 일시 장애, 필수 인자 또는 호출 인자 부적절",
-            "401": "유효하지 않은 앱키나 리프레시 토큰으로 요청"
+        "header": {
+            "statuscode": {
+                "200": "success",
+                "400": "서비스 일시 장애, 필수 인자 또는 호출 인자 부적절",
+                "401": "유효하지 않은 앱키나 액세스 토큰으로 요청"
+            },
+            "Content-Type": "application/json"
         },
-        "data": {
+        "body": {
             "token_type": "토큰 타입, bearer로 고정",
             "access_token": "갱신된 사용자 액세스 토큰 값",
             "expires_in": "액세스 토큰 만료 시간(초)",
